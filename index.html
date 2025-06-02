@@ -247,7 +247,7 @@ public void on(PlayerInteractEvent event) {
 
   <div class="method">
     <h3><code>ShulkerBoxCloseEvent</code></h3>
-    <p>Fired when a Shulker Box GUI is closed.<br><br>
+    <p>Fired when a placed Shulker Box is fully closed<br><br>
 	<code>getInventory()</code> returns the Shulker Box Inventory.<br>
     <code>getPlayer()</code> returns the player which was last to close the Shulker Box.</p>
   </div>
@@ -263,7 +263,7 @@ public void on(PlayerInteractEvent event) {
 
   <div class="method">
     <h3><code>ShulkerBoxDyeEvent</code></h3>
-    <p>Fired when a Shulker Box is placed in the world.<br><br>
+    <p>Fired when a Player attempts to dye a Shulker Box ItemStack in a Crafting Inventory<br><br>
     <code>getPlayer()</code> returns the Player that attempted to dye the Shulker Box in the Crafting Inventory.<br>
 	<code>getView()</code> returns the <code>InventoryView</code> Bukkit object.<br>
 	<code>getCraftingInventory()</code> returns the current Crafting Inventory.<br>
