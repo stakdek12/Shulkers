@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en-US"/>
+
+<head>
+<title>Shulkers | API Usage & Documentation</title>
+<meta name="description" content="The official Shulkers plugin wiki"/>
+
+<style>
+    body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #1e1e2f;
+        color: #f0f0f0;
+        margin: 0;
+        padding: 2rem;
+        line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+        color: #ffcc66;
+    }
+
+    a {
+        color: #66d9ef;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    code {
+        background-color: #2a2a40;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: monospace;
+    }
+
+    pre {
+        background-color: #2a2a40;
+        padding: 1rem;
+        border-radius: 6px;
+        overflow-x: auto;
+    }
+
+    .section {
+        margin-bottom: 3rem;
+    }
+
+    .footer {
+        margin-top: 4rem;
+        font-size: 0.9rem;
+        color: #888;
+        text-align: center;
+    }
+	
+	.docs-section {
+  padding: 2em;
+  border-top: 1px solid #ddd;
+}
+
+.docs-section h2 {
+  font-size: 1.8em;
+  margin-bottom: 1em;
+}
+
+.method {
+  margin-bottom: 1.5em;
+  padding: 1em;
+  background-color: #2a2a40;
+  border-left: 4px solid #5c6bc0;
+  border-radius: 6px;
+}
+
+.method h3 {
+  margin: 0 0 0.5em 0;
+  font-size: 1.2em;
+  color: #fff;
+}
+
+.method code {
+  background-color: #14141f;
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.95em;
+}
+
+.method p {
+  margin: 0;
+  color: #ffcc66;
+}
+</style>
+
+</head>
+
+
+<body>
+    <h1>Shulkers Plugin Documentation</h1>
+    <p>A Bukkit/Spigot plugin that replicates Shulker Boxes in Minecraft 1.8</p>
+
+    <div class="section">
+        <h2>API Features</h2>
+        <ul>
+            <li>Store full <code>ItemStack[]</code> inside a single item</li>
+            <li>Preview Shulker Box contents via GUI</li>
+            <li>Tooltip auto-updates based on contents</li>
+            <li>Easy integration with custom plugins</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Basic Usage</h2>
+
+        <h3>Check if an item is a Shulker Box:</h3>
+        <pre><code>if (ShulkersAPI.isShulkerBoxItemStack(item)) {
+    // it's a valid shulker box
+}</code></pre>
+
+        <h3>Read contents:</h3>
+        <pre><code>ItemStack[] contents = ShulkersAPI.getContents(shulkerItem);</code></pre>
+
+        <h3>Set contents:</h3>
+        <pre><code>ItemStack[] contents = new ItemStack[27];
+contents[0] = new ItemStack(Material.DIAMOND_SWORD);
+contents[1] = new ItemStack(Material.APPLE, 5);
+
+ItemStack updated = ShulkersAPI.setContents(shulkerItem, contents);</code></pre>
+    </div>
+
+    <div class="section">
+        <h2>Usage of API Example</h2>
+        <pre><code>@EventHandler
+public void on(PlayerInteractEvent event) {
+    Player player = event.getPlayer();
+    ItemStack hand = player.getItemInHand();
+
+    if (event.getAction() != Action.RIGHT_CLICK_AIR) return;
+    if (!ShulkersAPI.isShulkerBoxItemStack(hand)) return;
+
+    ItemStack[] contents = ShulkersAPI.getContents(hand);
+    Inventory preview = Bukkit.createInventory(new ShulkerInventoryHolder, 27,
+        hand.getItemMeta().getDisplayName() + ChatColor.RESET + " Preview");
+
+    preview.setContents(contents);
+    player.openInventory(preview);
+}</code></pre>
+    </div>
+	
+
+	<div class="docs-section" id="api-methods">
+  <h2>API Methods</h2>
+  <p>Below are the public methods available in <code>ShulkersAPI</code>:</p>
+
+  <div class="method">
+    <h3><code>isShulkerBoxItemStack(ItemStack)</code></h3>
+    <p>Returns <code>true</code> if the given ItemStack is a Shulker Box.</p>
+  </div>
+
+  <div class="method">
+    <h3><code>isShulkerBox(Block)</code></h3>
+    <p>Returns <code>true</code> if the given Block is a Shulker Box.</p>
+  </div>
+
+  <div class="method">
+    <h3><code>newShulkerBox()</code></h3>
+    <p>Creates a new empty Shulker Box ItemStack.</p>
+  </div>
+
+  <div class="method">
+    <h3><code>getShulkerBoxItemStackColor(ItemStack)</code></h3>
+    <p>Returns the <code>ShulkerType</code> color of the Shulker Box item.</p>
+  </div>
+
+  <div class="method">
+    <h3><code>getShulkerBoxColor(Block)</code></h3>
+    <p>Returns the <code>ShulkerType</code> color of a placed Shulker Box block.</p>
+  </div>
+
+  <div class="method">
+    <h3><code>setShulkerBoxColor(Block, ShulkerType)</code></h3>
+    <p>Sets the color of a placed Shulker Box block. Accepts all color variants.</p>
+  </div>
+
+  <div class="method">
+    <h3><code>setShulkerBoxItemColor(ItemStack, ShulkerType)</code></h3>
+    <p>Sets the color of a Shulker Box item. Only accepts normal colors (not sideways or open variants).</p>
+  </div>
+
+  <div class="method">
+    <h3><code>setDisplayName(ItemStack, String)</code></h3>
+    <p>Sets the display name of the Shulker Box item.</p>
+  </div>
+
+  <div class="method">
+    <h3><code>clearShulkerBoxInventory(Block)</code></h3>
+    <p>Clears the inventory of a placed Shulker Box block.</p>
+  </div>
+
+  <div class="method">
+    <h3><code>clearShulkerBoxItemInventory(ItemStack)</code></h3>
+    <p>Removes all contents from the Shulker Box item.</p>
+  </div>
+
+  <div class="method">
+    <h3><code>clearShulkerBoxEntityInventory(Item)</code></h3>
+    <p>Removes all contents from a dropped Shulker Box entity.</p>
+  </div>
+
+  <div class="method">
+    <h3><code>addItem(ItemStack, ItemStack)</code></h3>
+    <p>Adds the specified item to the Shulker Box's item inventory. Updates the lore preview.</p>
+  </div>
+
+  <div class="method">
+    <h3><code>setItem(ItemStack, ItemStack, int)</code></h3>
+    <p>Sets an item in the Shulker Box inventory at the given slot.</p>
+  </div>
+
+  <div class="method">
+    <h3><code>getContents(ItemStack)</code></h3>
+    <p>Returns the contents of the Shulker Box item as an array.</p>
+  </div>
+
+  <div class="method">
+    <h3><code>setContents(ItemStack, ItemStack[])</code></h3>
+    <p>Replaces the contents of the Shulker Box with the provided array of ItemStacks.</p>
+  </div>
+
+  <div class="method">
+    <h3><code>isShulkerBoxItemFull(ItemStack)</code></h3>
+    <p>Returns <code>true</code> if the Shulker Box item inventory is full (i.e., no empty slots).</p>
+  </div>
+</div>
+
+<div class="docs-section" id="custom-events">
+  <h2>Custom Events</h2>
+  <p>Shulkers fires several custom events that you can listen to in your plugin to interact with its lifecycle and behavior.</p>
+
+  <div class="method">
+    <h3><code>ShulkerBoxOpenEvent</code></h3>
+    <p>Fired when a player tries to open a placed Shulker Box.<br><br>
+    <code>getPlayer()</code> returns the player who opened it.<br>
+	<code>getInventory()</code> returns the Shulker Box Inventory.<br>
+    <code>getShulkerBoxBlock()</code> returns the Shulker Box Block.<br><br>
+	This Event can be cancelled via <code>event.setCancelled(true)</code></p>
+  </div>
+
+  <div class="method">
+    <h3><code>ShulkerBoxCloseEvent</code></h3>
+    <p>Fired when a Shulker Box GUI is closed.<br><br>
+	<code>getInventory()</code> returns the Shulker Box Inventory.<br>
+    <code>getPlayer()</code> returns the player which was last to close the Shulker Box.</p>
+  </div>
+
+  <div class="method">
+    <h3><code>ShulkerBoxDispenseEvent</code></h3>
+    <p>Fired when a Shulker Box is placed by a Dispenser<br><br>
+    <code>getDispenser()</code> returns the Dispenser<br>
+	<code>getShulkerBoxItemStack()</code> returns the Shulker Box ItemStack that will be placed by the Dispenser<br>
+	<code>getShulkerBox()</code> returns the Shulker Box Block that was placed by the Dispenser<br><br>
+    This Event can be cancelled via <code>event.setCancelled(true)</code></p>
+  </div>
+
+  <div class="method">
+    <h3><code>ShulkerBoxDyeEvent</code></h3>
+    <p>Fired when a Shulker Box is placed in the world.<br><br>
+    <code>getPlayer()</code> returns the Player that attempted to dye the Shulker Box in the Crafting Inventory.<br>
+	<code>getView()</code> returns the <code>InventoryView</code> Bukkit object.<br>
+	<code>getCraftingInventory()</code> returns the current Crafting Inventory.<br>
+	<code>getSlot()</code> returns the clicked slot (<code>int</code>).<br>
+	<code>getClickType()</code> returns the <code>ClickType</code> enum type.<br>
+	<code>getInventoryAction()</code> returns the <code>InventoryAction</code> enum type.<br><br>
+	This Event can be cancelled via <code>event.setCancelled(true)</code></p>
+  </div>
+
+</div>
+
+    <div class="footer">
+        &copy; 2025 stakdek12 — View on <a href="https://github.com/yourrepo">GitHub</a>
+    </div>
+	
+
+</body>
