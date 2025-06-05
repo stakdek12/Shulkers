@@ -11,7 +11,7 @@
         background-color: #1e1e2f;
         color: #f0f0f0;
         margin: 0;
-        padding: 2rem;
+        padding: 4em;
         line-height: 1.6;
     }
 
@@ -30,7 +30,7 @@
 
     code {
         background-color: #2a2a40;
-        padding: 2px 6px;
+        padding: 2px 0px;
         border-radius: 4px;
         font-family: monospace;
     }
@@ -47,15 +47,15 @@
     }
 
     .footer {
-        margin-top: 4rem;
+        margin-top: 10rem;
         font-size: 0.9rem;
         color: #888;
         text-align: center;
     }
 	
 	.docs-section {
-  padding: 2em;
-  border-top: 1px solid #ddd;
+  padding: 0;
+  margin-top: 6em;
 }
 
 .docs-section h2 {
@@ -95,16 +95,18 @@
 
 
 <body>
+
     <h1>Shulkers Plugin Documentation</h1>
     <p>A Bukkit/Spigot plugin that replicates Shulker Boxes in Minecraft 1.8</p>
 
     <div class="section">
         <h2>API Features</h2>
         <ul>
-            <li>Store full <code>ItemStack[]</code> inside a single item</li>
-            <li>Preview Shulker Box contents via GUI</li>
-            <li>Tooltip auto-updates based on contents</li>
-            <li>Easy integration with custom plugins</li>
+            <li>Robust manipulation of Shulker Box items and blocks - See list of methods available below
+			<li>Color management for Shulker Boxes (both ItemStack and Block)
+			<li>Allows easy management of Shulker Box ItemStacks, Item Entity's and Blocks
+			<li>Custom Events which can be listened to and cancelled<br><br>
+			<li>These features allow other plugins to create previews of the contents of Shulker Boxes, modify them, create tools to moderate them, or even create new Shulker Boxes with specific items</li>
         </ul>
     </div>
 
@@ -113,14 +115,14 @@
 
         <h3>Check if an item is a Shulker Box:</h3>
         <pre><code>if (ShulkersAPI.isShulkerBoxItemStack(item)) {
-    // it's a valid shulker box
+    // it's a valid shulker box - do something with the Shulker Box
 }</code></pre>
 
         <h3>Read contents:</h3>
         <pre><code>ItemStack[] contents = ShulkersAPI.getContents(shulkerItem);</code></pre>
 
         <h3>Set contents:</h3>
-        <pre><code>ItemStack[] contents = new ItemStack[27];
+		<pre><code>ItemStack[] contents = new ItemStack[27];
 contents[0] = new ItemStack(Material.DIAMOND_SWORD);
 contents[1] = new ItemStack(Material.APPLE, 5);
 
@@ -230,6 +232,22 @@ public void on(PlayerInteractEvent event) {
     <h3><code>isShulkerBoxItemFull(ItemStack)</code></h3>
     <p>Returns <code>true</code> if the Shulker Box item inventory is full (i.e., no empty slots).</p>
   </div>
+  
+  <div class="method">
+	<h3><code>getItem(ItemStack shulkerBox, int slot)</code></h3>
+	<p>Returns <code>ItemStack</code> from the specified <code>int</code> slot from the specified Shulker Box ItemStack.</p>
+  </div>
+  
+  <div class="method">
+  <h3><code>translateShulkerTypeToDyeColor(ShulkerType color)</code></h3>
+  <p>Returns Bukkit API <code>DyeColor</code> enum type translated from the <code>ShulkerType</code> color.</p>
+  </div>
+  
+  <div class="method">
+  <h3><code>translateDyeColorToShulkerType(DyeColor color)</code></h3>
+  <p>Returns Shulkers <code>ShulkerType</code> enum type translated from the (Bukkit API) <code>DyeColor</code> color.</p>
+  </div>
+  
 </div>
 
 <div class="docs-section" id="custom-events">
@@ -247,7 +265,7 @@ public void on(PlayerInteractEvent event) {
 
   <div class="method">
     <h3><code>ShulkerBoxCloseEvent</code></h3>
-    <p>Fired when a placed Shulker Box is fully closed<br><br>
+    <p>Fired when a Shulker Box GUI is closed.<br><br>
 	<code>getInventory()</code> returns the Shulker Box Inventory.<br>
     <code>getPlayer()</code> returns the player which was last to close the Shulker Box.</p>
   </div>
@@ -263,20 +281,38 @@ public void on(PlayerInteractEvent event) {
 
   <div class="method">
     <h3><code>ShulkerBoxDyeEvent</code></h3>
-    <p>Fired when a Player attempts to dye a Shulker Box ItemStack in a Crafting Inventory<br><br>
+    <p>Fired when a player attempts to dye a Shulker Box ItemStack in a crafting inventory.<br><br>
     <code>getPlayer()</code> returns the Player that attempted to dye the Shulker Box in the Crafting Inventory.<br>
 	<code>getView()</code> returns the <code>InventoryView</code> Bukkit object.<br>
 	<code>getCraftingInventory()</code> returns the current Crafting Inventory.<br>
 	<code>getSlot()</code> returns the clicked slot (<code>int</code>).<br>
 	<code>getClickType()</code> returns the <code>ClickType</code> enum type.<br>
-	<code>getInventoryAction()</code> returns the <code>InventoryAction</code> enum type.<br><br>
+	<code>getInventoryAction()</code> returns the <code>InventoryAction</code> enum type.<br>
+	<code>getOldColor()</code> returns the previous <code>DyeColor</code> enum type of the Shulker Box before dyeing.<br>
+	<code>getNewColor()</code> returns the new <code>DyeColor</code> enum type that the Shulker Box is being dyed to.<br><br>
 	This Event can be cancelled via <code>event.setCancelled(true)</code></p>
   </div>
+  
+  <div class="method">
+  <h3><code>ShulkerBoxUndyeEvent</code></h3>
+  <p>Fired when a player attempts to undye a Shulker Box ItemStack by right-clicking a Cauldron.<br>
+  <code>getCauldron()</code> returns the Block Cauldron.<br>
+  <code>getPreviousWaterLevel()</code> returns the previous (<code>int</code>) Cauldron water level before undyeing.<br>
+  <code>getCurrentWaterLevel()</code> returns the current (<code>int</code>) Cauldon water level after undeying.<br>
+  <code>getPlayer()</code> returns the Player that attempted to undye the Shulker Box ItemStack.<br>
+  <code>getShulkerBox()</code> returns the Shulker Box ItemStack that would be undyed.<br>
+  <code>getColor()</code> returns <code>ShulkerType</code> enum type of the color of the Shulker Box before undyeing.<br><br>
+  This Event can be cancelled via <code>event.setCancelled(true)</code></p>
+  </div>
+  
+  
+
 
 </div>
 
     <div class="footer">
-        &copy; 2025 stakdek12 — View on <a href="https://github.com/stakdek12">GitHub</a>
+        Copyright &copy; 2025 stakdek12<br>
+		Back to Plugin Page ➝ <a href="https://www.spigotmc.org/resources/%E2%9C%A6-shulkers-%E2%9C%A6-%C2%BB-shulker-boxes-for-1-8-%C2%AB-1-8-8-1-8-9-%E2%9C%A8.123550/">SpigotMC</a>
     </div>
 	
 
