@@ -305,6 +305,23 @@ public void on(PlayerInteractEvent event) {
   This Event can be cancelled via <code>event.setCancelled(true)</code></p>
   </div>
   
+  <div class="method">
+  <h3><code>ShulkerBoxPlaceEvent</code></h3>
+  <p>Fired when a player attempts to place a Shulker Box.<br>
+  <code>getShulkerBox()</code> returns the Block (Shulker Box) which was placed.<br>
+  <code>getItemInHand()</code> returns the ItemStack in the player's hand at the time of the event.<br>
+  <code>getPlayer()</code> returns the Player which caused this event to fire.<br><br>
+  This Event can be cancelled via <code>event.setCancelled(true)</code></p>
+  </div>
+  
+  <div class="method">
+  <h3><code>ShulkerBoxBreakEvent</code></h3>
+  <p>Fired when a player attempts to place a Shulker Box.<br>
+  <code>getShulkerBox()</code> returns the Block (Shulker Box) which was broken.<br>
+  <code>getPlayer()</code> returns the Player which caused this event to fire.<br><br>
+  This Event can be cancelled via <code>event.setCancelled(true)</code></p>
+  </div>
+  
   
 
 
